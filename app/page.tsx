@@ -214,7 +214,7 @@ export default function Home() {
             <ul>
               {users.map(user => (
                 <li key={user.address} className="flex items-center space-x-4 mb-4">
-                  <Image src={user.pfpUrl} alt={user.name} width={48} height={48} className="rounded-full" />
+                  <img src={user.pfpUrl} alt={user.name} width={48} height={48} className="rounded-full" />
                   <div>
                     <p className="font-bold text-gray-800">{user.name}</p>
                     <p className="text-sm text-gray-500">
@@ -233,7 +233,7 @@ export default function Home() {
             <ul>
               {watchlistedUsers.map(user => (
                 <li key={user.address} className="flex items-center space-x-4 mb-4">
-                  <Image src={user.pfpUrl} alt={user.name} width={48} height={48} className="rounded-full" />
+                  <img src={user.pfpUrl} alt={user.name} width={48} height={48} className="rounded-full" />
                   <div>
                     <p className="font-bold text-gray-800">{user.name}</p>
                     <p className="text-sm text-gray-500">
