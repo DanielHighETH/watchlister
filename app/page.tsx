@@ -1,7 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 
-import video from '../public/next.svg';
+import Image from 'next/image';
+
 
 export default function Home() {
   const [wallet, setWallet] = useState('');
@@ -107,7 +108,7 @@ export default function Home() {
       const response = await fetch(`/api/addToWatchlist?token=${token}&wallet=${user.address}`, {
         method: 'POST',
       });
-  
+
       if (response.ok) {
         setWatchlistedUsers(prev => [...prev, user]);
         setUsers(prev => prev.filter(u => u.address !== user.address));
@@ -120,7 +121,7 @@ export default function Home() {
       setAlertMessage('An error occurred. Please try again.');
     }
   };
-  
+
 
   const handleRemoveFromWatchlist = async (user: User) => {
     try {
@@ -138,7 +139,7 @@ export default function Home() {
       console.error('Error:', error);
     }
   };
-  
+
 
 
   return (
@@ -162,9 +163,9 @@ export default function Home() {
               type="text"
               id="walletAddress"
               placeholder="e.g. 0x1234..."
-              value={wallet}
-              onChange={e => setToken(e.target.value)}
+              onChange={e => setWallet(e.target.value)}
               className="p-2 border rounded-md focus:outline-none focus:border-indigo-500 text-gray-500"
+              autoComplete="off"
             />
             <button
               type="submit"
@@ -176,7 +177,6 @@ export default function Home() {
           </div>
         </div>
       ) : !hasToken ? (
-        // Render the content for users who have the key
         <div className="bg-white p-8 rounded-lg shadow-md w-1/3">
           <h1 className="text-2xl font-bold mb-4 text-center text-gray-700">WATCHLISTER</h1>
           <div className="flex flex-col space-y-4">
@@ -185,9 +185,10 @@ export default function Home() {
               type="text"
               id="tokenInput"
               placeholder="eyJhb..."
-              value={token}
+              defaultValue={token}
               onChange={e => setToken(e.target.value)}
               className="p-2 border rounded-md focus:outline-none focus:border-indigo-500 text-gray-500"
+              autoComplete="off"
             />
             <button
               type="submit"
@@ -198,13 +199,12 @@ export default function Home() {
             </button>
             <h2 className="text-xl font-bold mt-4 text-center text-gray-700">HOW TO GET YOUR FT TOKEN</h2>
             <div className="video-container">
-              {/* Replace with your video embed code */}
               <video className='w-full h-56' controls>
-                <source src={video} type="video/mp4" />
+                <source src="/TOKEN.mp4" type="video/mp4" />
               </video>
             </div>
             <h2 className="text-xl font-bold mt-4 text-center text-gray-700">WHY DO YOU NEED FT TOKEN</h2>
-            <p className="text-sm text-gray-500">Your FriendTech Token is needed in headers of friend.tech API calls. Without correct token it is impossible to add someone to your watchlist. The app is saving your key just localy and I'm not saving any of your data.</p>
+            <p className="text-sm text-gray-500">Your FriendTech Token is needed in headers of friend.tech API calls. Without correct token it is impossible to add someone to your watchlist. The app is saving your key just localy and I&apos;m not saving any of your data.</p>
           </div>
         </div>
       ) : (
@@ -214,7 +214,7 @@ export default function Home() {
             <ul>
               {users.map(user => (
                 <li key={user.address} className="flex items-center space-x-4 mb-4">
-                  <img src={user.pfpUrl} alt={user.name} className="w-12 h-12 rounded-full" />
+                  <Image src={user.pfpUrl} alt={user.name} width={48} height={48} className="rounded-full" />
                   <div>
                     <p className="font-bold text-gray-800">{user.name}</p>
                     <p className="text-sm text-gray-500">
@@ -233,7 +233,7 @@ export default function Home() {
             <ul>
               {watchlistedUsers.map(user => (
                 <li key={user.address} className="flex items-center space-x-4 mb-4">
-                  <img src={user.pfpUrl} alt={user.name} className="w-12 h-12 rounded-full" />
+                  <Image src={user.pfpUrl} alt={user.name} width={48} height={48} className="rounded-full" />
                   <div>
                     <p className="font-bold text-gray-800">{user.name}</p>
                     <p className="text-sm text-gray-500">
@@ -259,9 +259,10 @@ export default function Home() {
             <input
               type="text"
               placeholder="Enter your new token..."
-              value={token}
+              defaultValue={token}
               onChange={e => setToken(e.target.value)}
               className="p-2 border rounded-md focus:outline-none focus:border-indigo-500 text-gray-500 w-full mb-4"
+              autoComplete="off"
             />
             <button
               onClick={() => {
@@ -281,7 +282,7 @@ export default function Home() {
             <button onClick={() => setAlertMessage(null)} className="mt-2 bg-white text-red-500 px-4 py-2 rounded">Close</button>
           </div>
         </div>
-      )}      
+      )}
     </div>
   )
 }
