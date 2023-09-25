@@ -213,15 +213,17 @@ export default function Home() {
             <h2 className="text-xl font-bold mb-4 text-center text-gray-700">Not Watchlisted</h2>
             <ul>
               {users.map(user => (
-                <li key={user.address} className="flex items-center space-x-4 mb-4">
-                  <img src={user.pfpUrl} alt={user.name} width={48} height={48} className="rounded-full" />
-                  <div>
-                    <p className="font-bold text-gray-800">{user.name}</p>
-                    <p className="text-sm text-gray-500">
-                      <a href={`https://friend.tech/${user.username}`} target="_blank" rel="noopener noreferrer">
-                        @{user.username}
-                      </a>
-                    </p>
+                <li key={user.address} className="flex items-center justify-between space-x-4 mb-4">
+                  <div className="flex items-center space-x-4">
+                    <img src={user.pfpUrl} alt={user.name} width={48} height={48} className="rounded-full" />
+                    <div>
+                      <p className="font-bold text-gray-800">{user.name}</p>
+                      <p className="text-sm text-gray-500">
+                        <a href={`https://friend.tech/${user.username}`} target="_blank" rel="noopener noreferrer">
+                          @{user.username}
+                        </a>
+                      </p>
+                    </div>
                   </div>
                   <button onClick={() => handleAddToWatchlist(user)} className="bg-indigo-600 text-white px-4 py-2 rounded">ADD</button>
                 </li>
@@ -232,15 +234,17 @@ export default function Home() {
             <h2 className="text-xl font-bold mb-4 text-center text-gray-700">Watchlisted</h2>
             <ul>
               {watchlistedUsers.map(user => (
-                <li key={user.address} className="flex items-center space-x-4 mb-4">
-                  <img src={user.pfpUrl} alt={user.name} width={48} height={48} className="rounded-full" />
-                  <div>
-                    <p className="font-bold text-gray-800">{user.name}</p>
-                    <p className="text-sm text-gray-500">
-                      <a href={`https://friend.tech/${user.username}`} target="_blank" rel="noopener noreferrer">
-                        @{user.username}
-                      </a>
-                    </p>
+                <li key={user.address} className="flex items-center justify-between space-x-4 mb-4">
+                  <div className="flex items-center space-x-4">
+                    <img src={user.pfpUrl} alt={user.name} width={48} height={48} className="rounded-full" />
+                    <div>
+                      <p className="font-bold text-gray-800">{user.name}</p>
+                      <p className="text-sm text-gray-500">
+                        <a href={`https://friend.tech/${user.username}`} target="_blank" rel="noopener noreferrer">
+                          @{user.username}
+                        </a>
+                      </p>
+                    </div>
                   </div>
                   <button onClick={() => handleRemoveFromWatchlist(user)} className="bg-red-600 text-white px-4 py-2 rounded">REMOVE</button>
                 </li>
