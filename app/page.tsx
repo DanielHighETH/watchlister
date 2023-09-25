@@ -177,10 +177,10 @@ export default function Home() {
           </div>
         </div>
       ) : !hasToken ? (
-        <div className="bg-white p-8 rounded-lg shadow-md w-1/3">
-          <h1 className="text-2xl font-bold mb-4 text-center text-gray-700">WATCHLISTER</h1>
+        <div className="bg-white p-4 sm:p-8 rounded-lg shadow-md w-full sm:w-1/2 md:w-1/3">
+          <h1 className="text-xl sm:text-2xl font-bold mb-4 text-center text-gray-700">WATCHLISTER</h1>
           <div className="flex flex-col space-y-4">
-            <label htmlFor="tokenInput" className="text-lg font-medium text-gray-500">Insert your FT TOKEN:</label>
+            <label htmlFor="tokenInput" className="text-base sm:text-lg font-medium text-gray-500">Insert your FT TOKEN:</label>
             <input
               type="text"
               id="tokenInput"
@@ -197,19 +197,19 @@ export default function Home() {
             >
               ENTER
             </button>
-            <h2 className="text-xl font-bold mt-4 text-center text-gray-700">HOW TO GET YOUR FT TOKEN</h2>
+            <h2 className="text-lg sm:text-xl font-bold mt-4 text-center text-gray-700">HOW TO GET YOUR FT TOKEN</h2>
             <div className="video-container">
               <video className='w-full h-56' controls>
                 <source src="/TOKEN.mp4" type="video/mp4" />
               </video>
             </div>
-            <h2 className="text-xl font-bold mt-4 text-center text-gray-700">WHY DO YOU NEED FT TOKEN</h2>
-            <p className="text-sm text-gray-500">Your FriendTech Token is needed in headers of friend.tech API calls. Without correct token it is impossible to add someone to your watchlist. The app is saving your key just localy and I&apos;m not saving any of your data.</p>
+            <h2 className="text-lg sm:text-xl font-bold mt-4 text-center text-gray-700">WHY DO YOU NEED FT TOKEN</h2>
+            <p className="text-xs sm:text-sm text-gray-500">Your FriendTech Token is needed in headers of friend.tech API calls. Without correct token it is impossible to add someone to your watchlist. The app is saving your key just localy and I&apos;m not saving any of your data.</p>
           </div>
         </div>
       ) : (
-        <div className="flex w-full max-w-6xl mx-auto mt-10 space-x-10">
-          <div className="w-1/2">
+        <div className="flex flex-col md:flex-row w-full max-w-6xl mx-auto mt-10 md:space-x-10 pt-10">
+          <div className="w-full md:w-1/2 mb-6 md:mb-0">
             <h2 className="text-xl font-bold mb-4 text-center text-gray-700">Not Watchlisted</h2>
             <ul>
               {users.map(user => (
@@ -228,7 +228,7 @@ export default function Home() {
               ))}
             </ul>
           </div>
-          <div className="w-1/2">
+          <div className="w-full md:w-1/2">
             <h2 className="text-xl font-bold mb-4 text-center text-gray-700">Watchlisted</h2>
             <ul>
               {watchlistedUsers.map(user => (
