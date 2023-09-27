@@ -57,6 +57,5 @@ export async function GET(request: Request): Promise<NextResponse> {
     const uniqueData: User[] = extractedData.filter((user, index, self) => 
         index === self.findIndex((t) => t.address === user.address)
     );
-
     return NextResponse.json(uniqueData);
 }

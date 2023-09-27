@@ -1,14 +1,14 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-
-import Image from 'next/image';
-
+import Link from 'next/link';
+import { ethers } from 'ethers';
 
 export default function Home() {
   const [wallet, setWallet] = useState('');
   const [hasKey, setHasKey] = useState<null | boolean>(null);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
 
 
   const [token, setToken] = useState('');
@@ -18,8 +18,6 @@ export default function Home() {
   const [watchlistedUsers, setWatchlistedUsers] = useState<any[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-
 
   type User = {
     address: string;
@@ -74,7 +72,7 @@ export default function Home() {
       }
 
       const data = await response.json();
-      if (data) {
+      if (data.hasKey) {
         setHasKey(true);
         localStorage.setItem('verifiedWallet', walletAddress);
       } else {
@@ -86,7 +84,6 @@ export default function Home() {
     }
   }
 
-
   const handleEnterClick = () => {
     if (wallet) {
       verifyWallet(wallet);
@@ -95,6 +92,7 @@ export default function Home() {
       console.warn("Please enter a valid wallet address.");
     }
   }
+
 
   const handleTokenClick = () => {
     if (token) {
@@ -140,6 +138,49 @@ export default function Home() {
     }
   };
 
+  const connectWallet = async () => {
+    if (typeof window !== 'undefined' && (window as any).ethereum) {
+        const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+        try {
+            const network = await provider.getNetwork();
+
+            if (network.chainId !== 0x2105) {
+                try {
+                    const baseNetworkParams = {
+                        chainId: '0x2105',
+                        chainName: 'Base Mainnet',
+                        nativeCurrency: {
+                            name: 'ETH',
+                            symbol: 'ETH',
+                            decimals: 18
+                        },
+                        rpcUrls: ['https://mainnet.base.org'],
+                        blockExplorerUrls: ['https://basescan.org']
+                    };
+
+                    await (window as any).ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [baseNetworkParams]
+                    });
+
+                } catch (switchError) {
+                    console.error('Failed to switch to BASE network:', switchError);
+                    setAlertMessage('Please manually switch to the BASE network in your wallet.');
+                    return;
+                }
+            }
+
+            const accounts: string[] = await provider.send('eth_requestAccounts', []);
+            const userAddress: string = accounts[0];
+            localStorage.setItem('connectedWallet', userAddress);
+            verifyWallet(userAddress);
+        } catch (error: any) {
+          console.error('Failed to connect wallet:', error);
+        }
+    } else {
+        setAlertMessage('Please install MetaMask or another Ethereum wallet provider.');
+    }
+};
 
 
   return (
@@ -158,22 +199,8 @@ export default function Home() {
         <div className="bg-white p-8 rounded-lg shadow-md w-96">
           <h1 className="text-2xl font-bold mb-4 text-center text-gray-700">WATCHLISTER</h1>
           <div className="flex flex-col space-y-4">
-            <label htmlFor="walletAddress" className="text-lg font-medium text-gray-500">Insert your FT wallet address:</label>
-            <input
-              type="text"
-              id="walletAddress"
-              placeholder="e.g. 0x1234..."
-              onChange={e => setWallet(e.target.value)}
-              className="p-2 border rounded-md focus:outline-none focus:border-indigo-500 text-gray-500"
-              autoComplete="off"
-            />
-            <button
-              type="submit"
-              onClick={handleEnterClick}
-              className="bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
-            >
-              ENTER
-            </button>
+            <p className="text-lg font-medium text-gray-500 text-center">Please connect your wallet</p>
+            <button onClick={connectWallet} className="bg-orange-600 text-white px-4 py-2 rounded-md">Connect wallet</button>
           </div>
         </div>
       ) : !hasToken ? (
@@ -185,7 +212,7 @@ export default function Home() {
               type="text"
               id="tokenInput"
               placeholder="eyJhb..."
-              defaultValue={token}
+              defaultValue={""}
               onChange={e => setToken(e.target.value)}
               className="p-2 border rounded-md focus:outline-none focus:border-indigo-500 text-gray-500"
               autoComplete="off"
@@ -252,33 +279,37 @@ export default function Home() {
             </ul>
           </div>
           <div className="fixed top-4 right-4 flex space-x-4">
+            <Link href="watchlist" className="bg-purple-600 text-white px-4 py-2 rounded">My watchlist</Link>
             <button onClick={fetchUsers} className="bg-green-600 text-white px-4 py-2 rounded">Refresh Data</button>
-            <button onClick={() => setIsModalOpen(true)} className="bg-yellow-600 text-white px-4 py-2 rounded">Edit Token</button>
+            <button onClick={() => setIsModalOpen(true)} className="bg-yellow-500 text-white px-4 py-2 rounded">Edit Token</button>
           </div>
         </div>
       )} {isModalOpen && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
-          <div className="bg-white p-8 rounded-lg shadow-md">
-            <h2 className="text-xl font-bold mb-4 text-center text-gray-700">Edit Your Token</h2>
-            <input
-              type="text"
-              placeholder="Enter your new token..."
-              defaultValue={token}
-              onChange={e => setToken(e.target.value)}
-              className="p-2 border rounded-md focus:outline-none focus:border-indigo-500 text-gray-500 w-full mb-4"
-              autoComplete="off"
-            />
-            <button
-              onClick={() => {
-                localStorage.setItem('verifiedToken', token);
-                setIsModalOpen(false);
-              }}
-              className="bg-indigo-600 text-white px-4 py-2 rounded w-full"
-            >
-              Save
-            </button>
+        <>
+          <div className="fixed top-0 left-0 w-full h-full bg-black opacity-50 z-40"></div>
+          <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
+            <div className="bg-white p-8 rounded-lg shadow-md">
+              <h2 className="text-xl font-bold mb-4 text-center text-gray-700">Edit Your Token</h2>
+              <input
+                type="text"
+                placeholder="Enter your new token..."
+                defaultValue={token}
+                onChange={e => setToken(e.target.value)}
+                className="p-2 border rounded-md focus:outline-none focus:border-indigo-500 text-gray-500 w-full mb-4"
+                autoComplete="off"
+              />
+              <button
+                onClick={() => {
+                  localStorage.setItem('verifiedToken', token);
+                  setIsModalOpen(false);
+                }}
+                className="bg-indigo-600 text-white px-4 py-2 rounded w-full"
+              >
+                Save
+              </button>
+            </div>
           </div>
-        </div>
+        </>
       )} {alertMessage && (
         <div className="fixed top-0 left-0 w-full flex items-center justify-center z-10 pt-10">
           <div className="bg-red-500 text-white p-6 rounded-lg shadow-lg text-center">
