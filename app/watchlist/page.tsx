@@ -643,7 +643,7 @@ export default function Home() {
                     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
                         <div className="bg-white p-8 rounded-lg shadow-md">
                             <h2 className="text-xl font-bold mb-4 text-center text-red-500">Error</h2>
-                            <p>Please try again, your transaction didn't go through.</p>
+                            <p>Please try again, your transaction did not go through.</p>
                             <button
                                 onClick={() => setIsErrorModalOpen(false)}
                                 className="mt-2 bg-red-600 text-white px-4 py-2 rounded w-full"
